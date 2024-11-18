@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_smorest import abort
 
 app = Flask(__name__)
 
@@ -27,7 +28,8 @@ def get_user_data(name):
     for i in users :
         if i['user'] == name :
             return i, 201
-    return "No such user exists", 404
+    # return "No such user exists", 404
+    abort(404, message = 'No such user exists')     # using flask_smorest
 
 # -------------------------
 
@@ -54,9 +56,7 @@ def change_password(name) :
         if i['user'] == name :
             i['data']['password'] = request_data['data']['password']
             return i, 201
-    return "No such user exsits", 404
+    # return "No such user exsits", 404
+    abort(404, message = 'No such user exists')     # using flask_smorest
 # -----------------------------------
 
-
-# inorder to execute this enter -->
-# python -m flask run
