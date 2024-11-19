@@ -33,3 +33,4 @@
   --> docker run -dp 5000:5000 -w /app -v "/c/Users/Kratika/Desktop/python-flask:/app" <name-of-image>
   ----: -w --> working directory
   ----: -v --> mapping local directory to container's working directory via volumes
+  \*\* also .flaskenv file is required
