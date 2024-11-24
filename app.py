@@ -1,62 +1,20 @@
-from flask import Flask, request
-from flask_smorest import abort
+from flask import Flask
+from flask_smorest import Api
+
+from resources.users import blp as UsersBluePrint
 
 app = Flask(__name__)
 
-users = [
-            {'user': 'kratika',
-             'data':{
-                     'username' : 'kratika.saxena',
-                     'password' : '123456'
-                    }
-            }
-        ]
+# Inorder to create a documentation-testing on Swagger
+app.config["PROPAGATE_EXCEPTIONS"] = True
+app.config["API_TITLE"] = "Users REST API - Flask"
+app.config["API_VERSION"] = "v1"
+app.config["OPENAPI_VERSION"] = "3.0.3"
+app.config["OPENAPI_URL_PREFIX"] = "/"
+app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"
+app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
 
-# ----- GET REQUESTS --------
-# request type = GET
+api = Api(app)
 
-# To fetch all the users data
-# endpoint = /users
-@app.get('/users')
-def get_users() :
-    return users
-
-# To fetch a particular user data
-@app.get('/users/<string:name>')
-def get_user_data(name):
-    name = name.lower()
-    for i in users :
-        if i['user'] == name :
-            return i, 201
-    # return "No such user exists", 404
-    abort(404, message = 'No such user exists')     # using flask_smorest
-
-# -------------------------
-
-# ------ POST REQUESTS ------
-# request type = POST
-# POSTMAN : select 'Body' tab then click 'raw' 
-#           change type from "Text" to "JSON"
-
-
-# endpoint = /newuser
-@app.post('/newuser')
-def post_user():
-    request_data = request.get_json()
-    new_user = {'user' : request_data['user'],
-                'data' : request_data['data']}
-    users.append(new_user)
-    return new_user, 201
-
-# endpoint = /changepswd
-@app.post('/changepswd/<string:name>')
-def change_password(name) :
-    request_data = request.get_json()
-    for i in users :
-        if i['user'] == name :
-            i['data']['password'] = request_data['data']['password']
-            return i, 201
-    # return "No such user exsits", 404
-    abort(404, message = 'No such user exists')     # using flask_smorest
-# -----------------------------------
-
+api.register_blueprint(UsersBluePrint)
+# documentation will be exposed on http://127.0.0.1:5000/swagger-ui

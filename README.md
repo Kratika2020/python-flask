@@ -8,6 +8,18 @@
 - To run a python file --> python <file>.py
 - To run flask app --> python -m flask run
 
+- Topics introduced :
+  [+] Blueprints and MethodViews
+  code :
+  from flask.views import MethodView
+  from flask\*smorest import Blueprint, abort
+  blp = Blueprint("stores", **name**, description="Operations on stores") //asteriks to be replaced with underscore
+  //stores is the name of the file to be used
+  @blp.route("/store/<string:store_id>")
+  class Store(MethodView):
+  def get(self, store_id):
+  pass
+
 ---
 
 ## Docker
